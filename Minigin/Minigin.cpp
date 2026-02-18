@@ -14,6 +14,7 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
+#include <thread>
 #include "ResourceManager.h"
 
 SDL_Window* g_window{};
@@ -98,9 +99,25 @@ void dae::Minigin::Run(const std::function<void()>& load)
 #endif
 }
 
-void dae::Minigin::RunOneFrame()
-{
+void dae::Minigin::RunOneFrame() {
+
+	const int targetFPS = 60;
+	const float frameTimeMs = 1000.0f / targetFPS; 
+	static auto lastTime = std::chrono::high_resolution_clock::now();
+	auto currentTime = std::chrono::high_resolution_clock::now();
+
+	float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+	lastTime = currentTime;
+
 	m_quit = !InputManager::GetInstance().ProcessInput();
-	SceneManager::GetInstance().Update();
+	SceneManager::GetInstance().Update(deltaTime);
+
 	Renderer::GetInstance().Render();
+	auto frameEndTime = std::chrono::high_resolution_clock::now();
+	float actualWorkTimeMs = std::chrono::duration<float, std::milli>(frameEndTime - currentTime).count();
+
+	if (actualWorkTimeMs < frameTimeMs) {
+		auto sleepTime = std::chrono::milliseconds(static_cast<int>(frameTimeMs - actualWorkTimeMs));
+		std::this_thread::sleep_for(sleepTime);
+	}
 }

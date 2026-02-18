@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include "Transform.h"
+#include "BaseComponent.h"
 
 namespace dae
 {
@@ -9,16 +10,35 @@ namespace dae
 	class GameObject 
 	{
 		Transform m_transform{};
-		std::shared_ptr<Texture2D> m_texture{};
+		std::vector<std::unique_ptr<BaseComponent>> m_components{};
 	public:
-		virtual void Update();
+		virtual void Update(float deltaTime);
 		virtual void Render() const;
+		
+		template <typename T, typename... Args>
+		T* AddComponent(Args&&... args) {
+			auto component = std::make_unique<T>(this, std::forward<Args>(args)...);
+			T* ptr = component.get();
+			m_components.push_back(std::move(component));
+			return ptr;
+		}
 
-		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
+		template <typename T>
+		T* GetComponent() const {
+			for (auto& component : m_components) {
+				T* result = dynamic_cast<T*>(component.get());
+				if (result) return result;
+			}
+			return nullptr;
+		}
+
+		void RemoveComponent(BaseComponent* pComponent);
+
+
+		Transform& GetTransform() { return m_transform; }
 
 		GameObject() = default;
-		virtual ~GameObject();
+		virtual ~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <SDL3/SDL.h>
 #include "GameObject.h"
 #include "Transform.h"
 
@@ -11,7 +12,7 @@ namespace dae
 	class TextObject final : public GameObject
 	{
 	public:
-		void Update() override;
+		void Update(float deltaTime) override;
 		void Render() const override;
 
 		void SetText(const std::string& text);
@@ -24,6 +25,7 @@ namespace dae
 		TextObject(TextObject&& other) = delete;
 		TextObject& operator=(const TextObject& other) = delete;
 		TextObject& operator=(TextObject&& other) = delete;
+
 	private:
 		bool m_needsUpdate{};
 		std::string m_text{};
