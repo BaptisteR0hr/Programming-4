@@ -5,6 +5,9 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "GameObject.h"
+#include <memory>
+#include <string>
+#include <utility>
 
 namespace dae
 {
@@ -17,21 +20,32 @@ namespace dae
     {
     }
 
-    void TextComponent::Update(float)
+    void dae::TextComponent::Update(float)
     {
         if (m_needsUpdate)
         {
+            if (m_text.empty())
+            {
+                m_textTexture = nullptr;
+                m_needsUpdate = false;
+                return;
+            }
+
             const SDL_Color white = { 255, 255, 255, 255 };
-            const auto surf = TTF_RenderText_Blended(m_font->GetFont(), m_text.c_str(), m_text.length(), white);
+
+            const auto surf = TTF_RenderText_Blended(m_font->GetFont(), m_text.c_str(), 0, white);
+
             if (surf == nullptr)
             {
                 throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
             }
+
             auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
             if (texture == nullptr)
             {
                 throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
             }
+
             SDL_DestroySurface(surf);
             m_textTexture = std::make_shared<Texture2D>(texture);
             m_needsUpdate = false;
@@ -42,7 +56,7 @@ namespace dae
     {
         if (m_textTexture != nullptr)
         {
-            const auto& pos = GetOwner()->GetTransform().GetPosition();
+            const auto& pos = GetOwner()->GetWorldPosition();
             dae::Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
         }
     }

@@ -9,6 +9,7 @@ dae::RenderComponent::RenderComponent(GameObject* pOwner, const std::string& fil
 }
 
 void dae::RenderComponent::Render() const {
-    const auto& pos = GetOwner()->GetTransform().GetPosition();
+    const auto& pos = GetOwner()->GetWorldPosition();
+
     Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 }

@@ -14,36 +14,41 @@
 #include "TextObject.h"
 #include "Scene.h"
 #include "RenderComponent.h"
+#include "RotatorComponent.h"
 #include <filesystem>
+#include <memory>
+
 namespace fs = std::filesystem;
 
-static void load()
-{
+static void load() {
     auto& scene = dae::SceneManager::GetInstance().CreateScene();
 
-    auto backgroundObject = std::make_unique<dae::GameObject>();
-    backgroundObject->AddComponent<dae::RenderComponent>("background.png");
-    scene.Add(std::move(backgroundObject));
+    // Achtergrond
+    auto background = std::make_unique<dae::GameObject>();
+    background->AddComponent<dae::RenderComponent>("background.png");
+    background->SetLocalPosition({ 0.0f, 0.0f, 0.0f });
+    scene.Add(std::move(background));
 
-    auto logoObject = std::make_unique<dae::GameObject>();
-    logoObject->AddComponent<dae::RenderComponent>("logo.png");
-    logoObject->GetTransform().SetPosition(358, 180);
-    scene.Add(std::move(logoObject));
+    // FPS Counter 
+    auto fpsObject = std::make_unique<dae::GameObject>();
+    auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+    fpsObject->AddComponent<dae::TextComponent>("", font);
+    fpsObject->AddComponent<dae::FPSComponent>();
+    fpsObject->SetLocalPosition({ 10.0f, 10.0f, 0.0f });
+    scene.Add(std::move(fpsObject));
 
+    // midden Logo
+    auto staticLogo = std::make_unique<dae::GameObject>();
+    staticLogo->AddComponent<dae::RenderComponent>("logo.png");
+    staticLogo->SetLocalPosition({ 358, 180, 0.0f });
+    scene.Add(std::move(staticLogo));
+
+    // Titel
     auto fontLarge = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
     auto titleObject = std::make_unique<dae::GameObject>();
     titleObject->AddComponent<dae::TextComponent>("Programming 4 Assignment", fontLarge);
-    titleObject->GetTransform().SetPosition(290, 20);
+    titleObject->SetLocalPosition({ 290, 20,0 });
     scene.Add(std::move(titleObject));
-
-    auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
-
-    auto fpsObject = std::make_unique<dae::GameObject>();
-    fpsObject->AddComponent<dae::TextComponent>("Calculating...", font);
-    fpsObject->AddComponent<dae::FPSComponent>();
-    fpsObject->GetTransform().SetPosition(10, 10);
-
-    scene.Add(std::move(fpsObject));
 }
 
 int main(int, char*[]) {

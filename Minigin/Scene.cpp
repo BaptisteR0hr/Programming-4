@@ -28,9 +28,15 @@ void Scene::RemoveAll()
 
 void Scene::Update(const float DeltaT)
 {
-	for(auto& object : m_objects)
+	auto it = std::remove_if(m_objects.begin(), m_objects.end(),
+		[](const std::unique_ptr<GameObject>& obj) {
+			return obj->IsDead();
+		});
+	m_objects.erase(it, m_objects.end());
+
+	for (auto& gameObject : m_objects)
 	{
-		object->Update(DeltaT);
+		gameObject->Update(DeltaT);
 	}
 }
 
