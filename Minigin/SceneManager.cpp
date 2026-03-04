@@ -22,3 +22,11 @@ dae::Scene& dae::SceneManager::CreateScene()
 	m_scenes.emplace_back(new Scene());
 	return *m_scenes.back();
 }
+
+void dae::SceneManager::RenderImGui()
+{
+	if (m_activeSceneIndex >= 0 && m_activeSceneIndex < static_cast<int>(m_scenes.size()))
+	{
+		m_scenes[m_activeSceneIndex]->RenderImGui();
+	}
+}

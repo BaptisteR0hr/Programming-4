@@ -20,6 +20,14 @@ void dae::GameObject::Render() const
 	}
 }
 
+void dae::GameObject::RenderImGui()
+{
+    for (auto& component : m_components)
+    {
+        component->RenderImGui();
+    }
+}
+
 void dae::GameObject::RemoveComponent(BaseComponent* pComponent)
 {
 	m_components.erase(std::remove_if(m_components.begin(), m_components.end(),

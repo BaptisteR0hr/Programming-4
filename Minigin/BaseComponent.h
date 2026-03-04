@@ -14,6 +14,7 @@ namespace dae {
 
         virtual void Update(float deltaTime) = 0;
         virtual void Render() const = 0;
+        virtual void RenderImGui() {};
 
     protected:
         GameObject* GetOwner() const { return m_pOwner; }

@@ -48,3 +48,10 @@ void Scene::Render() const
 	}
 }
 
+void dae::Scene::RenderImGui()
+{
+	for (auto& gameObject : m_objects)
+	{
+		gameObject->RenderImGui();
+	}
+}

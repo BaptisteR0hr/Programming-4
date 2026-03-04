@@ -7,7 +7,6 @@
 
 namespace dae
 {
-	class Texture2D;
 	class GameObject 
 	{
 		Transform m_transform{};
@@ -29,7 +28,8 @@ namespace dae
 	public:
 		virtual void Update(float deltaTime);
 		virtual void Render() const;
-		
+		void RenderImGui();
+
 		template <typename T, typename... Args>
 		T* AddComponent(Args&&... args) {
 			auto component = std::make_unique<T>(this, std::forward<Args>(args)...);

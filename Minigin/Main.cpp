@@ -16,6 +16,7 @@
 #include "RenderComponent.h"
 #include "RotatorComponent.h"
 #include <filesystem>
+#include "TrashTheCacheComponent.h"
 #include <memory>
 
 namespace fs = std::filesystem;
@@ -49,6 +50,11 @@ static void load() {
     titleObject->AddComponent<dae::TextComponent>("Programming 4 Assignment", fontLarge);
     titleObject->SetLocalPosition({ 290, 20,0 });
     scene.Add(std::move(titleObject));
+
+    // Benchmark
+    auto benchmarkGO = std::make_unique<dae::GameObject>();
+    benchmarkGO->AddComponent<dae::TrashTheCacheComponent>();
+    scene.Add(std::move(benchmarkGO));
 }
 
 int main(int, char*[]) {

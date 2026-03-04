@@ -30,10 +30,36 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/BaseComponent.cpp
   Minigin/TextComponent.cpp
   Minigin/FPSComponent.cpp
- "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp")
+ "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp"   "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
+
+# Dear ImGui downloaden en configureren
+include(FetchContent)
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui
+  GIT_TAG v1.92.5-docking
+  GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+# Maak de imgui-bibliotheek aan met de juiste bestanden
+add_library(imgui STATIC
+  ${imgui_SOURCE_DIR}/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+  ${imgui_SOURCE_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
+ "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp")
+
+# Zorg dat de headers gevonden worden
+target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${sdl3_SOURCE_DIR}/include)
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
+target_compile_features(imgui PUBLIC cxx_std_20)
 
 include(FetchContent)
 # add glm
@@ -124,6 +150,7 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 target_link_libraries("${TARGET_NAME}" PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
+  imgui
   glm::glm
   ${VLD_LIBRARIES}
 )
