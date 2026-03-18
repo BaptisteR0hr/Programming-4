@@ -60,6 +60,19 @@ static void load() {
     titleObject->SetLocalPosition({ 290, 20,0 });
     scene.Add(std::move(titleObject));
 
+    // CONTROLS
+    auto fontSmall = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
+    auto controlsObject = std::make_unique<dae::GameObject>();
+
+controlsObject->AddComponent<dae::TextComponent>(
+    "Controls: [K] Lose Life | [L] Add 100 Score", 
+    fontSmall
+);
+
+controlsObject->SetLocalPosition({ 10, 150, 0 }); 
+
+scene.Add(std::move(controlsObject));
+
     // PLAYER 1 SETUP
     auto player1 = std::make_unique<dae::GameObject>();
     auto pc1 = player1->AddComponent<dae::PlayerComponent>();
