@@ -2,7 +2,7 @@
 #include "BaseComponent.h"
 
 namespace dae {
-    class RotatorComponent final : public BaseComponent {
+    class RotatorComponent : public BaseComponent {
     public:
         RotatorComponent(GameObject* pOwner, float radius, float speed);
         void Update(float deltaTime) override;
