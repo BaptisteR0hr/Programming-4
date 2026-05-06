@@ -31,7 +31,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/TextComponent.cpp
   Minigin/FPSComponent.cpp
   Minigin/XInputController.cpp
- "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp" "Minigin/XInputController.h"  "Minigin/ScoreDisplay.h" "Minigin/Observer.h" "Minigin/PlayerComponent.h" "Minigin/UIObservers.h" "Minigin/AchievementManager.h" "Minigin/GameObjectCommands.cpp")
+ "Minigin/RenderComponent.h" "Minigin/RenderComponent.cpp" "Minigin/RotatorComponent.h" "Minigin/RotatorComponent.cpp" "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp" "Minigin/XInputController.h"  "Minigin/ScoreDisplay.h" "Minigin/Observer.h" "Minigin/PlayerComponent.h" "Minigin/UIObservers.h" "Minigin/AchievementManager.h" "Minigin/GameObjectCommands.cpp" "Game/LevelLoader.h" "Game/GridManager.h" "Game/Pengo.h" "Minigin/PengoState.h" "Minigin/IdleState.h" "Minigin/IdleState.cpp" "Minigin/MovingState.h" "Minigin/PushingState.h")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -55,7 +55,7 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/imgui_demo.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
- "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp" "Minigin/XInputController.h"  "Minigin/ScoreDisplay.h" "Minigin/Observer.h" "Minigin/PlayerComponent.h" "Minigin/UIObservers.h" "Minigin/AchievementManager.h" "Minigin/GameObjectCommands.cpp")
+ "Minigin/TrashTheCacheComponent.h" "Minigin/TrashTheCacheComponent.cpp" "Minigin/XInputController.h"  "Minigin/ScoreDisplay.h" "Minigin/Observer.h" "Minigin/PlayerComponent.h" "Minigin/UIObservers.h" "Minigin/AchievementManager.h" "Minigin/GameObjectCommands.cpp" "Game/LevelLoader.h" "Game/GridManager.h" "Game/Pengo.h" "Minigin/PengoState.h" "Minigin/IdleState.h" "Minigin/IdleState.cpp" "Minigin/MovingState.h" "Minigin/PushingState.h")
 
 # Zorg dat de headers gevonden worden
 target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${sdl3_SOURCE_DIR}/include)
@@ -145,6 +145,8 @@ find_package(Steamworks QUIET)
 
 target_include_directories("${TARGET_NAME}" PUBLIC
   ${CMAKE_SOURCE_DIR}/Minigin/
+  ${CMAKE_SOURCE_DIR}/Game/      
+  ${glm_SOURCE_DIR}             
   ${VLD_INCLUDE_DIR}
 )
 
